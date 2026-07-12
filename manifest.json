@@ -1,6 +1,6 @@
 {
-  "name": "Water",
-  "short_name": "Water",
+  "name": "H2O Tracker",
+  "short_name": "H2O Tracker",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#0b0f19",
