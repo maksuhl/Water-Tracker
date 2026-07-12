@@ -10,7 +10,7 @@
     <!-- Подключаем манифест с обновленной версией для сброса кэша -->
     <link rel="manifest" href="manifest.json?v=5">
     
-    <!-- Иконки для iOS (экран Домой и Safari) -->
+    <!-- Иконки для iOS (экран Домой и Safari) с точным расширением капсом -->
     <link rel="apple-touch-icon" href="icon.PNG?v=5">
     <link rel="apple-touch-icon" sizes="180x180" href="icon.PNG?v=5">
     <link rel="icon" type="image/png" sizes="32x32" href="icon.PNG?v=5">
@@ -48,7 +48,6 @@
         .progress-bar-bg { width: 100%; height: 12px; background: #0f172a; border-radius: 6px; overflow: hidden; margin-top: 15px; }
         .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #0284c7, var(--accent-blue)); transition: width 0.3s ease-out; }
         
-        /* Кнопка отмены в углу карточки */
         .undo-btn {
             position: absolute; top: 15px; right: 15px;
             background: rgba(255,255,255,0.07); border: none; color: #64748b;
@@ -97,7 +96,6 @@
             border-radius: 14px; padding: 12px; font-size: 13px; font-weight: 600; width: 100%; margin-top: 20px;
         }
         
-        /* Технический лог ошибок для дебага */
         #debug-log { 
             width: 100%; max-width: 400px; background: #450a0a; color: #fca5a5; 
             font-family: monospace; font-size: 11px; padding: 10px; border-radius: 10px; 
@@ -113,9 +111,7 @@
     <div id="screen-home" class="screen active">
         <h1>Сегодня</h1>
         <div class="goal-container">
-            <!-- КНОПКА ОТМЕНЫ ДЕЙСТВИЯ (СТРЕЛОЧКА НАЗАД) -->
             <button class="undo-btn" id="undoButton" title="Отменить последнее действие">↩</button>
-            
             <div class="counter" id="totalDisplay">0 <span>/ 2000 мл</span></div>
             <div style="font-size: 12px; color: #64748b; margin-top: -2px;">чистая вода для организма</div>
             <div class="progress-bar-bg">
@@ -173,7 +169,9 @@
     </div>
 
     <script>
+        // Исправленный логгер ошибок (игнорирует внутренний CORS шум Safari)
         window.onerror = function(msg, url, line) {
+            if (msg === "Script error." && line === 0) return true;
             const el = document.getElementById('debug-log');
             if(el) { el.style.display = 'block'; el.innerHTML += 'Err: ' + msg + ' (L:' + line + ')<br>'; }
             return false;
