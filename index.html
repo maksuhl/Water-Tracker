@@ -6,7 +6,15 @@
     <title>H2O Tracker</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="manifest" href="manifest.json?v=2">
+    
+    <!-- Подключаем манифест с обновленной версией для сброса кэша -->
+    <link rel="manifest" href="manifest.json?v=3">
+    
+    <!-- Иконки для iOS (экран Домой и Safari) -->
+    <link rel="apple-touch-icon" href="icon.png?v=3">
+    <link rel="apple-touch-icon" sizes="180x180" href="icon.png?v=3">
+    <link rel="icon" type="image/png" sizes="32x32" href="icon.png?v=3">
+
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -149,7 +157,7 @@
     <!-- ЭКРАН 3: ЦЕЛЬ -->
     <div id="screen-goal" class="screen">
         <h1>Настройки цели</h1>
-        <div class="section-title">Дневная正常 норма воды (мл)</div>
+        <div class="section-title">Дневная норма воды (мл)</div>
         <div class="input-group">
             <input type="number" id="goalInput" class="input-number" value="2000" pattern="[0-9]*" inputmode="numeric">
             <button class="save-btn" id="saveGoalBtn">ОК</button>
@@ -165,7 +173,6 @@
     </div>
 
     <script>
-        // Логгер ошибок для вывода прямо на экран телефона
         window.onerror = function(msg, url, line) {
             const el = document.getElementById('debug-log');
             if(el) { el.style.display = 'block'; el.innerHTML += 'Err: ' + msg + ' (L:' + line + ')<br>'; }
@@ -177,13 +184,11 @@
         let todayLogs = [];
         let historyArchive = [];
 
-        // Стабильный запуск скрипта через AddEventListener вместо onclick в HTML
         document.addEventListener('DOMContentLoaded', function() {
             loadData();
             checkNewDay();
             updateUI();
 
-            // Вешаем клики на кнопки напитков через дата-атрибуты
             document.querySelectorAll('.grid .btn').forEach(button => {
                 button.addEventListener('click', function() {
                     const name = this.getAttribute('data-drink');
@@ -193,15 +198,10 @@
                 });
             });
 
-            // Кнопка отмены последнего действия
             document.getElementById('undoButton').addEventListener('click', undoLastAction);
-
-            // Кнопки навигации таббара
             document.getElementById('tab-home').addEventListener('click', () => switchTab('home'));
             document.getElementById('tab-analytics').addEventListener('click', () => switchTab('analytics'));
             document.getElementById('tab-goal').addEventListener('click', () => switchTab('goal'));
-
-            // Кнопки настроек
             document.getElementById('saveGoalBtn').addEventListener('click', saveNewGoal);
             document.getElementById('resetDayBtn').addEventListener('click', confirmReset);
         });
@@ -244,14 +244,11 @@
             updateUI();
         }
 
-        // ФУНКЦИЯ ОТМЕНЫ
         function undoLastAction() {
             if (todayLogs.length === 0) {
                 alert("Удалять пока нечего!");
                 return;
             }
-            
-            // Берем самую последнюю запись из лога и вычитаем ее из счетчика
             const removedItem = todayLogs.shift();
             currentPureWater = Math.max(0, currentPureWater - removedItem.pureCalculated);
             
